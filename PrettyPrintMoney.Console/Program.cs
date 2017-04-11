@@ -7,9 +7,9 @@ namespace PrettyPrintMoney.Console
     {
         static void Main(string[] args)
         {
-            try
+            while (true)
             {
-                while (true)
+                try
                 {
                     System.Console.ForegroundColor = ConsoleColor.Cyan;
                     var str = System.Console.ReadLine();
@@ -19,14 +19,11 @@ namespace PrettyPrintMoney.Console
                     else
                         PrintError();
                 }
-                
+                catch (Exception)
+                {
+                    PrintError();
+                }
             }
-            catch (Exception)
-            {
-                PrintError();
-            }
-            System.Console.WriteLine("Press any key to exit...");
-            System.Console.Read();
         }
 
         static void PrintError()
