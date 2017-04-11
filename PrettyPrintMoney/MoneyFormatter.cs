@@ -52,7 +52,13 @@ namespace PrettyPrintMoney
 
         public static string FormatMoney(this double d)
         {
-            if (d <= 0) throw new ArgumentException("please input positive number", nameof(d));
+            const int maxValue = 2000000000;
+
+            if (d < 0) throw new ArgumentException("please input non-negative number", nameof(d));
+            if (d > maxValue) throw new ArgumentException("input too large", nameof(d));
+
+            if (d == 0)
+                return "zero dollars";
 
             var intPart = (int)Math.Truncate(d);
             var floatPart = Math.Round(d - intPart, 2);

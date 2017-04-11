@@ -1,10 +1,30 @@
 ﻿using NUnit.Framework;
+using System;
 
 namespace PrettyPrintMoney.UnitTest
 {
     [TestFixture]
     public class MoneyFormatterTest
     {
+        [Test]
+        public void When_Negative_Then_Error()
+        {
+            Assert.Throws<ArgumentException>(() => (-1.0).FormatMoney());
+        }
+
+        [Test]
+        public void When_TooLarge_Then_Error()
+        {
+            Assert.Throws<ArgumentException>(() => (2000000000.01).FormatMoney());
+        }
+
+        [Test]
+        public void When_0_Returns_Zero_Dollars()
+        {
+            var x = 0.0.FormatMoney();
+            Assert.AreEqual("zero dollars", x);
+        }
+
         [Test]
         public void When_1000000_Returns_One_Million_Dollars()
         {
