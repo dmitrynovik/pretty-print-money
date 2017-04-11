@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettyPrintMoney", "PrettyP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettyPrintMoney.UnitTest", "PrettyPrintMoney.UnitTest\PrettyPrintMoney.UnitTest.csproj", "{94E96AE2-11BE-43E9-9D71-0347165D400A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettyPrintMoney.Console", "PrettyPrintMoney.Console\PrettyPrintMoney.Console.csproj", "{2CEDB87D-027F-4325-8649-0CCB63D721D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{94E96AE2-11BE-43E9-9D71-0347165D400A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94E96AE2-11BE-43E9-9D71-0347165D400A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94E96AE2-11BE-43E9-9D71-0347165D400A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CEDB87D-027F-4325-8649-0CCB63D721D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CEDB87D-027F-4325-8649-0CCB63D721D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CEDB87D-027F-4325-8649-0CCB63D721D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CEDB87D-027F-4325-8649-0CCB63D721D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

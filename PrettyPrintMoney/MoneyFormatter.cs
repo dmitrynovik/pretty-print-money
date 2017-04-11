@@ -61,13 +61,15 @@ namespace PrettyPrintMoney
                 return "zero dollars";
 
             var intPart = (int)Math.Truncate(d);
-            var floatPart = Math.Round(d - intPart, 2);
+            var floatPart = (int) (Math.Round(d - intPart, 2) * 100);
 
             var intStr = DoFormatMoney(intPart);
-            intStr = intStr.IsEmpty() ? intStr : $"{intStr} dollars";
+            var suffix = intPart == 1 ? "dollar" : "dollars";
+            intStr = intStr.IsEmpty() ? intStr : $"{intStr} {suffix}";
 
-            var floatStr = DoFormatMoney((int)(floatPart * 100));
-            floatStr = floatStr.IsEmpty() ? floatStr : $"{floatStr} cents";
+            var floatStr = DoFormatMoney(floatPart);
+            suffix = floatPart == 1 ? "cent" : "cents";
+            floatStr = floatStr.IsEmpty() ? floatStr : $"{floatStr} {suffix}";
 
             if (intStr.IsEmpty() && floatStr.IsEmpty())
                 return string.Empty;
