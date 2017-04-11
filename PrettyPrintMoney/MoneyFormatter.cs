@@ -97,7 +97,18 @@ namespace PrettyPrintMoney
                 }
                 else if (num > 0)
                 {
-                    output.Add(DoPrettyPrintCurrent(num));
+                    if (num < 10 && num > 0)
+                    {
+                        output.Add(digitMap[num]);
+                    }
+                    else
+                    {
+                        var x10 = num / 10;
+                        var tens = x10Map[x10];
+                        num -= 10 * x10;
+                        var ones = digitMap[num];
+                        output.Add($"{tens} {ones}");
+                    }
                     num = 0;
                 }
             } while (num > 0);
@@ -106,19 +117,6 @@ namespace PrettyPrintMoney
                 return output.FirstOrDefault() ?? string.Empty;
 
             return $"{string.Join(", ", output.Take(output.Count - 1))} and {output[output.Count - 1]}";
-        }
-
-        private static string DoPrettyPrintCurrent(int num)
-        {
-            if (num < 10 && num > 0)
-            {
-                return digitMap[num];
-            }
-            var x10 = num / 10;
-            var tens = x10Map[x10];
-            num -= 10 * x10;
-            var ones = digitMap[num];
-            return $"{tens} {ones}";
         }
     }
 }
