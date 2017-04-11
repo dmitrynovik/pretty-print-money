@@ -48,7 +48,14 @@ namespace PrettyPrintMoney.UnitTest
         }
 
         [Test]
-        public void When_1357256_And_32_Returns_Correct_Answer()
+        public void When_137_64_Returns_Correct()
+        {
+            var x = 137.64.FormatMoney();
+            Assert.AreEqual("one hundred and thirty seven dollars and sixty four cents", x);
+        }
+
+        [Test]
+        public void When_1357256_And_32_Returns_Correct()
         {
             var x = 1357256.32.FormatMoney();
             Assert.AreEqual(

@@ -4,8 +4,52 @@ using System.Linq;
 
 namespace PrettyPrintMoney
 {
+    class Power10
+    {
+        public int Order { get; set; }
+        public string Name { get; set; }
+    }
+
     public static class MoneyFormatter
     {
+        static IDictionary<int, string> digitMap = new Dictionary<int, string>()
+            {
+                {1, "one" },
+                {2, "two" },
+                {3, "three" },
+                {4, "four" },
+                {5, "five" },
+                {6, "six" },
+                {7, "seven" },
+                {8, "eight" },
+                {9, "nine" },
+            };
+
+        static IDictionary<int, string> x10Map = new Dictionary<int, string>()
+            {
+                {1, "ten" },
+                {2, "twenty" },
+                {3, "thirty" },
+                {4, "fourty" },
+                {5, "fifty" },
+                {6, "sixty" },
+                {7, "seventy" },
+                {8, "eightty" },
+                {9, "ninety" },
+            };
+
+        static IDictionary<int, Power10> orderMap = new Dictionary<int, Power10>()
+            {
+                {2, new Power10 { Order = 100, Name = "hundred" } },
+                {3, new Power10 { Order = 1000, Name = "thousand" } },
+                {4, new Power10 { Order = 1000, Name = "thousand" } },
+                {5, new Power10 { Order = 1000, Name = "thousand" } },
+                {6, new Power10 { Order = 1000000, Name = "million" } },
+                {7, new Power10 { Order = 1000000, Name = "million" } },
+                {8, new Power10 { Order = 1000000, Name = "million" } },
+                {9, new Power10 { Order = 1000000000, Name = "billion" } },
+            };
+
         public static string FormatMoney(this double d)
         {
             if (d <= 0) throw new ArgumentException("please input positive number", nameof(d));
@@ -31,40 +75,6 @@ namespace PrettyPrintMoney
 
         private static string DoFormatMoney(int num)
         {
-            var digitMap = new Dictionary<int, string>()
-            {
-                {1, "one" },
-                {2, "two" },
-                {3, "three" },
-                {4, "four" },
-                {5, "five" },
-                {6, "six" },
-                {7, "seven" },
-                {8, "eight" },
-                {9, "nine" },
-            };
-
-            var x10Map = new Dictionary<int, string>()
-            {
-                {1, "ten" },
-                {2, "twenty" },
-                {3, "thirty" },
-                {4, "fourty" },
-                {5, "fifty" },
-                {6, "sixty" },
-                {7, "seventy" },
-                {8, "eightty" },
-                {9, "ninety" },
-            };
-
-            var orderMap = new Dictionary<int, string>()
-            {
-                {2, "hundred" },
-                {3, "thousand" },
-                {6, "million" },
-                {9, "billion" },
-            };
-
             var output = new List<string>();
             do
             {
@@ -72,27 +82,15 @@ namespace PrettyPrintMoney
 
                 if (orderMap.ContainsKey(order))
                 {
-                    var orderValue = (int)Math.Pow(10, order); // 7000 => 1000
-                    var currentDigit = num/orderValue; // 7000 => 7
-                    output.Add($"{digitMap[currentDigit]} {orderMap[order]}"); // seven thousand
-                    num -= currentDigit * orderValue;
+                    var value = orderMap[order];
+                    var currentNumber = num/value.Order; // 7000 => 7, 35000 => 35
+                    output.Add($"{DoFormatMoney(currentNumber)} {value.Name}"); // seven thousand
+                    num -= currentNumber * value.Order;
                 }
-                else
+                else if (num > 0)
                 {
-                    if (num < 10 && num > 0)
-                    {
-                        output.Add(digitMap[num]);
-                        num = 0;
-                    }
-                    else if (num > 0)
-                    {
-                        var x10 = num / 10;
-                        var tens = x10Map[x10];
-                        num -= 10 * x10;
-                        var ones = digitMap[num];
-                        output.Add($"{tens} {ones}");
-                        num = 0;
-                    }
+                    output.Add(DoPrettyPrintCurrent(num));
+                    num = 0;
                 }
             } while (num > 0);
 
@@ -100,6 +98,19 @@ namespace PrettyPrintMoney
                 return output.FirstOrDefault() ?? string.Empty;
 
             return $"{string.Join(", ", output.Take(output.Count - 1))} and {output[output.Count - 1]}";
+        }
+
+        private static string DoPrettyPrintCurrent(int num)
+        {
+            if (num < 10 && num > 0)
+            {
+                return digitMap[num];
+            }
+            var x10 = num / 10;
+            var tens = x10Map[x10];
+            num -= 10 * x10;
+            var ones = digitMap[num];
+            return $"{tens} {ones}";
         }
     }
 }
