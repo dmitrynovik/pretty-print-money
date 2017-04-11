@@ -6,7 +6,7 @@ namespace PrettyPrintMoney
 {
     class Power10
     {
-        public int Order { get; set; }
+        public int Magnitude { get; set; }
         public string Name { get; set; }
     }
 
@@ -38,16 +38,16 @@ namespace PrettyPrintMoney
                 {9, "ninety" },
             };
 
-        static readonly IDictionary<int, Power10> OrderMap = new Dictionary<int, Power10>()
+        static readonly IDictionary<int, Power10> Power10Map = new Dictionary<int, Power10>()
             {
-                {2, new Power10 { Order = 100, Name = "hundred" } },
-                {3, new Power10 { Order = 1000, Name = "thousand" } },
-                {4, new Power10 { Order = 1000, Name = "thousand" } },
-                {5, new Power10 { Order = 1000, Name = "thousand" } },
-                {6, new Power10 { Order = 1000000, Name = "million" } },
-                {7, new Power10 { Order = 1000000, Name = "million" } },
-                {8, new Power10 { Order = 1000000, Name = "million" } },
-                {9, new Power10 { Order = 1000000000, Name = "billion" } },
+                {2, new Power10 { Magnitude = 100, Name = "hundred" } },
+                {3, new Power10 { Magnitude = 1000, Name = "thousand" } },
+                {4, new Power10 { Magnitude = 1000, Name = "thousand" } },
+                {5, new Power10 { Magnitude = 1000, Name = "thousand" } },
+                {6, new Power10 { Magnitude = 1000000, Name = "million" } },
+                {7, new Power10 { Magnitude = 1000000, Name = "million" } },
+                {8, new Power10 { Magnitude = 1000000, Name = "million" } },
+                {9, new Power10 { Magnitude = 1000000000, Name = "billion" } },
             };
 
         public static string FormatMoney(this double d)
@@ -86,17 +86,18 @@ namespace PrettyPrintMoney
             var output = new List<string>();
             do
             {
-                var order = (int)Math.Log10(num);
+                var power10 = (int)Math.Log10(num);
 
-                if (OrderMap.ContainsKey(order))
+                if (Power10Map.ContainsKey(power10))
                 {
-                    var value = OrderMap[order];
-                    var currentNumber = num/value.Order; // 7000 => 7, 35000 => 35
-                    output.Add($"{DoFormatMoney(currentNumber)} {value.Name}"); // seven thousand
-                    num -= currentNumber * value.Order;
+                    var value = Power10Map[power10];
+                    var currentNumber = num / value.Magnitude; // 7000 => 7, 35000 => 35
+                    output.Add($"{DoFormatMoney(currentNumber)} {value.Name}"); // seven thousand etc...
+                    num -= currentNumber * value.Magnitude;
                 }
-                else if (num > 0)
+                else if (num > 0) 
                 {
+                    // ... we are small now - base case of recursion
                     if (num < 10 && num > 0)
                     {
                         output.Add(DigitMap[num]);
