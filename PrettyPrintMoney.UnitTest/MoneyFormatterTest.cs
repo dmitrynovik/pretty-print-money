@@ -15,7 +15,7 @@ namespace PrettyPrintMoney.UnitTest
         [Test]
         public void When_TooLarge_Then_Error()
         {
-            Assert.Throws<ArgumentException>(() => (2000000000.01).FormatMoney());
+            Assert.Throws<ArgumentException>(() => 2000000000.01.FormatMoney());
         }
 
         [Test]

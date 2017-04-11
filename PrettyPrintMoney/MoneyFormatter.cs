@@ -12,7 +12,7 @@ namespace PrettyPrintMoney
 
     public static class MoneyFormatter
     {
-        static IDictionary<int, string> digitMap = new Dictionary<int, string>()
+        static readonly IDictionary<int, string> DigitMap = new Dictionary<int, string>()
             {
                 {1, "one" },
                 {2, "two" },
@@ -25,7 +25,7 @@ namespace PrettyPrintMoney
                 {9, "nine" },
             };
 
-        static IDictionary<int, string> x10Map = new Dictionary<int, string>()
+        static readonly IDictionary<int, string> X10Map = new Dictionary<int, string>()
             {
                 {1, "ten" },
                 {2, "twenty" },
@@ -38,7 +38,7 @@ namespace PrettyPrintMoney
                 {9, "ninety" },
             };
 
-        static IDictionary<int, Power10> orderMap = new Dictionary<int, Power10>()
+        static readonly IDictionary<int, Power10> OrderMap = new Dictionary<int, Power10>()
             {
                 {2, new Power10 { Order = 100, Name = "hundred" } },
                 {3, new Power10 { Order = 1000, Name = "thousand" } },
@@ -57,7 +57,7 @@ namespace PrettyPrintMoney
             if (d < 0) throw new ArgumentException("please input non-negative number", nameof(d));
             if (d > maxValue) throw new ArgumentException("input too large", nameof(d));
 
-            if (d == 0)
+            if (Math.Abs(d) < 0.001) // aka == 0 (FP)
                 return "zero dollars";
 
             var intPart = (int)Math.Truncate(d);
@@ -88,9 +88,9 @@ namespace PrettyPrintMoney
             {
                 var order = (int)Math.Log10(num);
 
-                if (orderMap.ContainsKey(order))
+                if (OrderMap.ContainsKey(order))
                 {
-                    var value = orderMap[order];
+                    var value = OrderMap[order];
                     var currentNumber = num/value.Order; // 7000 => 7, 35000 => 35
                     output.Add($"{DoFormatMoney(currentNumber)} {value.Name}"); // seven thousand
                     num -= currentNumber * value.Order;
@@ -99,14 +99,14 @@ namespace PrettyPrintMoney
                 {
                     if (num < 10 && num > 0)
                     {
-                        output.Add(digitMap[num]);
+                        output.Add(DigitMap[num]);
                     }
                     else
                     {
                         var x10 = num / 10;
-                        var tens = x10Map[x10];
+                        var tens = X10Map[x10];
                         num -= 10 * x10;
-                        var ones = digitMap[num];
+                        var ones = DigitMap[num];
                         output.Add($"{tens} {ones}");
                     }
                     num = 0;
